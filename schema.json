@@ -1,0 +1,71 @@
+{
+  "type": "record",
+  "name": "Workbook",
+  "fields": [
+    {
+      "name": "filename",
+      "type": "string"
+    },
+    {
+      "name": "worksheets",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "Worksheet",
+          "fields": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "cells",
+              "type": {
+                "type": "array",
+                "items": {
+                  "type": "record",
+                  "name": "Cell",
+                  "fields": [
+                    {
+                      "name": "cell_type",
+                      "type": "string"
+                    },
+                    {
+                      "name": "columnIndex",
+                      "type": "int"
+                    },
+                    {
+                      "name": "rowIndex",
+                      "type": "int"
+                    },
+                    {
+                      "name": "value",
+                      "type": ["string", "float", "null"]
+                    },
+                    {
+                      "name": "format",
+                      "type": [
+                        "null",
+                        {
+                          "type": "record",
+                          "name": "Format",
+                          "fields": [
+                            {"name": "fontName", "type": ["null", "string"], "default": null},
+                            {"name": "fontSize", "type": ["null", "int"], "default": null},
+                            {"name": "bold", "type": ["null", "boolean"], "default": null},
+                            {"name": "dateFormat", "type": ["null", "string"], "default": null}
+                          ]
+                        }
+                      ],
+                      "default": null
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
