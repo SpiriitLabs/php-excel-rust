@@ -1,16 +1,20 @@
 <?php
 
-namespace Spiriit\Rustsheet\Structure;
+/*
+ * This file is part of the SpiriitLabs php-excel-rust package.
+ * Copyright (c) SpiriitLabs <https://www.spiriit.com/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use AvroDataIO;
-use Symfony\Component\Filesystem\Filesystem;
+namespace Spiriit\Rustsheet\Structure;
 
 class Worksheet
 {
     private string $name;
 
     /**
-     * @var CellValueFormat[]
+     * @var Cell[]
      */
     private array $cells = [];
 
@@ -26,22 +30,9 @@ class Worksheet
         return new self($name ?? 'Sheet');
     }
 
-    public function writeCell(Cell $cell, CellDataType $type = null): self
+    public function writeCell(Cell $cell): self
     {
-        $value = $cell->value;
-
-        $this->cells[] = match ($type) {
-            CellDataType::ArrayFormula => new CellValueFormat(cellDataType: CellDataType::ArrayFormula, cell: $cell, value: $value),
-            CellDataType::Blank => new CellValueFormat(cellDataType: CellDataType::Blank, cell: $cell, value: 0),
-            CellDataType::Error => new CellValueFormat(cellDataType: CellDataType::Error, cell: $cell, value: 0),
-            CellDataType::Boolean => new CellValueFormat(cellDataType: CellDataType::Boolean, cell: $cell, value: (bool) $value),
-            CellDataType::Formula => new CellValueFormat(cellDataType: CellDataType::Formula, cell: $cell, value: $value),
-            CellDataType::Number => new CellValueFormat(cellDataType: CellDataType::Number, cell: $cell, value: (float) $value),
-            CellDataType::DateTime => new CellValueFormat(cellDataType: CellDataType::DateTime, cell: $cell, value: $value),
-            CellDataType::RichString => new CellValueFormat(cellDataType: CellDataType::RichString, cell: $cell, value: $value),
-            CellDataType::String => new CellValueFormat(cellDataType: CellDataType::String, cell: $cell, value: (string) $value),
-            default => new CellValueFormat(cellDataType: CellDataType::String, cell: $cell, value: $value),
-        };
+        $this->cells[] = $cell;
 
         return $this;
     }
@@ -50,15 +41,15 @@ class Worksheet
     {
         return [
             'name' => $this->name,
-            'cells' => array_map(function (CellValueFormat $cellValueFormat) {
+            'cells' => array_map(function (Cell $cell) {
                 return [
-                    'cell_type' => $cellValueFormat->cellDataType->name,
-                    'columnIndex' => $cellValueFormat->cell->columnIndex,
-                    'rowIndex' => $cellValueFormat->cell->rowIndex,
-                    'value' => $cellValueFormat->value,
-                    'format' => $cellValueFormat->cell->format?->toArray(),
+                    'columnIndex' => $cell->columnIndex,
+                    'rowIndex' => $cell->rowIndex,
+                    'value' => $cell->value,
+                    'format' => $cell->format?->toArray(),
                 ];
-            }, $this->cells)
+            }, $this->cells),
+            'autofit' => $this->autofit,
         ];
     }
 
@@ -70,20 +61,22 @@ class Worksheet
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
 
     public function setAutofit(): self
     {
         $this->autofit = true;
+
         return $this;
     }
 
     /**
-     * @return CellValueFormat[]
+     * @return Cell[]
      */
     public function getCellsRowHeaders(): array
     {
-        return array_filter($this->cells, fn(CellValueFormat $cellValueFormat) => $cellValueFormat->cell->rowIndex === 0);
+        return array_filter($this->cells, fn (Cell $cell) => 0 === $cell->rowIndex);
     }
 }

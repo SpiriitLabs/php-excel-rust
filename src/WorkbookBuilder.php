@@ -1,11 +1,19 @@
 <?php
 
+/*
+ * This file is part of the SpiriitLabs php-excel-rust package.
+ * Copyright (c) SpiriitLabs <https://www.spiriit.com/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Spiriit\Rustsheet;
+
 use Spiriit\Rustsheet\Structure\Format;
 use Spiriit\Rustsheet\Structure\Workbook;
 use Spiriit\Rustsheet\Structure\Worksheet;
 
-class RustSheetBuilder
+class WorkbookBuilder
 {
     private ?Format $defaultStyleHeader = null;
 
@@ -16,12 +24,14 @@ class RustSheetBuilder
     public function setDefaultStyleHeader(Format $format): self
     {
         $this->defaultStyleHeader = $format;
+
         return $this;
     }
 
     public function addWorksheet(Worksheet $worksheet): self
     {
         $this->workbook->addWorksheet($worksheet);
+
         return $this;
     }
 
@@ -30,9 +40,9 @@ class RustSheetBuilder
         if (null !== $this->defaultStyleHeader) {
             /** @var Worksheet $worksheet */
             foreach ($this->workbook->getWorksheets() as $worksheet) {
-                foreach ($worksheet->getCellsRowHeaders() as $cellValueFormat) {
-                    if (null === $cellValueFormat->cell->format) {
-                        $cellValueFormat->cell->format = $this->defaultStyleHeader;
+                foreach ($worksheet->getCellsRowHeaders() as $cell) {
+                    if (null === $cell->format) {
+                        $cell->format = $this->defaultStyleHeader;
                     }
                 }
             }

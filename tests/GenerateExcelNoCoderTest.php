@@ -15,7 +15,7 @@ use Spiriit\Rustsheet\ExportAvro\ExportAvro;
 use Spiriit\Rustsheet\WorkbookFactory;
 use Spiriit\Tests\Fixtures\MyExcel;
 
-class GenerateExcelTest extends TestCase
+class GenerateExcelNoCoderTest extends TestCase
 {
     #[Test]
     public function it_must_generate_excel(): void
@@ -26,7 +26,7 @@ class GenerateExcelTest extends TestCase
         $schema = file_get_contents(__DIR__.'/../schema.json');
 
         $exportAvro = new ExportAvro(schema: $schema, pathAvro: __DIR__.'/us.avro');
-        $exportAvro->export($results);
+        $exportAvro->export($results, false);
 
         self::assertFileExists(__DIR__.'/us.avro');
 

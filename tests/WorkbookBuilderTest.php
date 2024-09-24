@@ -1,22 +1,28 @@
 <?php
 
+/*
+ * This file is part of the SpiriitLabs php-excel-rust package.
+ * Copyright (c) SpiriitLabs <https://www.spiriit.com/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Spiriit\Tests;
 
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Spiriit\Rustsheet\RustSheetBuilder;
 use Spiriit\Rustsheet\Structure\Cell;
-use Spiriit\Rustsheet\Structure\CellDataType;
 use Spiriit\Rustsheet\Structure\Format;
 use Spiriit\Rustsheet\Structure\Workbook;
 use Spiriit\Rustsheet\Structure\Worksheet;
+use Spiriit\Rustsheet\WorkbookBuilder;
 
-class RustSheetBuilderTest extends TestCase
+class WorkbookBuilderTest extends TestCase
 {
     #[Test]
     public function it_must_build_workbook(): void
     {
-        $builder = new RustSheetBuilder(new Workbook('test.xlsx'));
+        $builder = new WorkbookBuilder(new Workbook('test.xlsx'));
 
         $builder = $builder
             ->setDefaultStyleHeader(
@@ -40,7 +46,6 @@ class RustSheetBuilderTest extends TestCase
                 format: null,
                 value: 'test'
             ),
-            CellDataType::String
         );
 
         $worksheet->writeCell(
@@ -50,23 +55,21 @@ class RustSheetBuilderTest extends TestCase
                 format: null,
                 value: '=1+1'
             ),
-            CellDataType::Formula
         );
 
         $worksheet->writeCell(
             new Cell(
                 columnIndex: 1,
                 rowIndex: 2,
-                format: Format::new()->dateFormat('d mmm yyyy'),
+                format: Format::new()->setNumFormat('d mmm yyyy'),
                 value: '2024-09-28'
             ),
-            CellDataType::DateTime
         );
 
         $builder->addWorksheet($worksheet);
         $workbookArray = $builder->build();
 
         self::assertEquals('Worksheet1', $worksheet->getName());
-        self::assertEquals('2024-09-28', $workbookArray['workbook']['worksheets'][0]['cells'][5]['value']);
+        self::assertEquals('2024-09-28', $workbookArray['worksheets'][0]['cells'][5]['value']);
     }
 }

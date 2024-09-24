@@ -1,11 +1,18 @@
 <?php
 
+/*
+ * This file is part of the SpiriitLabs php-excel-rust package.
+ * Copyright (c) SpiriitLabs <https://www.spiriit.com/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Spiriit\Rustsheet;
 
 use Spiriit\Rustsheet\Structure\Workbook;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class ExcelFactory
+class WorkbookFactory
 {
     public function __construct()
     {
@@ -15,7 +22,7 @@ class ExcelFactory
     {
         $options = $this->getOptionsResolver($excel)->resolve($options);
 
-        $builder = new RustSheetBuilder(new Workbook($options['filename']));
+        $builder = new WorkbookBuilder(new Workbook($options['filename']));
 
         $excel->buildSheet($builder);
 

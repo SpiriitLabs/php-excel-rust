@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the SpiriitLabs php-excel-rust package.
+ * Copyright (c) SpiriitLabs <https://www.spiriit.com/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Spiriit\Tests;
 
 use PHPUnit\Framework\Attributes\Test;
@@ -48,9 +55,9 @@ SCHEMA;
         );
 
         $values = [
-            "name" => "Pierre",
-            "favorite_color" => "red",
-            "favorite_numbers" => [1, 2, 3]
+            'name' => 'Pierre',
+            'favorite_color' => 'red',
+            'favorite_numbers' => [1, 2, 3],
         ];
 
         $response = $exportAvro->export($values);
