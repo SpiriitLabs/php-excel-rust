@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the SpiriitLabs php-excel-rust package.
+ * Copyright (c) SpiriitLabs <https://www.spiriit.com/>
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Spiriit\Rustsheet;
 
 use Psr\Log\LoggerAwareInterface;
@@ -11,14 +18,13 @@ class ExcelRust implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
-    const RUST_GEN_AVRO = 'rust_gen_avro';
-    const RUST_GEN_HTML = 'rust_gen_html';
+    public const RUST_GEN_AVRO = 'rust_gen_avro';
+    public const RUST_GEN_HTML = 'rust_gen_html';
 
     public function __construct(
         private WorkbookFactory $workbookFactory,
         private string $rustGenLocation,
-    )
-    {
+    ) {
     }
 
     public function generateExcelFromAvro(ExcelInterface $excel): void
@@ -68,7 +74,7 @@ class ExcelRust implements LoggerAwareInterface
     {
         $schema = file_get_contents(__DIR__.'/../schema.json');
 
-        $avroFilePath = sprintf('%s/%s.avro', sys_get_temp_dir(), uniqid('avro', true));
+        $avroFilePath = \sprintf('%s/%s.avro', sys_get_temp_dir(), uniqid('avro', true));
 
         $exportAvro = new ExportAvro(schema: $schema, pathAvro: $avroFilePath);
         $exportAvro->export($results);
@@ -98,15 +104,10 @@ class ExcelRust implements LoggerAwareInterface
         ];
     }
 
-    private function rustGenHtml(string $htmlFile)
-    {
-
-    }
-
     private function checkProcessStatus(mixed $status, mixed $stdout, mixed $stderr)
     {
         if (0 !== $status && '' !== $stderr) {
-            throw new \RuntimeException(\sprintf('The exit status code \'%s\' says something went wrong:' . "\n" . 'stderr: "%s"' . "\n" . 'stdout: "%s"', $status, $stderr, $stdout), $status);
+            throw new \RuntimeException(\sprintf('The exit status code \'%s\' says something went wrong:'."\n".'stderr: "%s"'."\n".'stdout: "%s"', $status, $stderr, $stdout), $status);
         }
     }
 
@@ -125,7 +126,7 @@ class ExcelRust implements LoggerAwareInterface
 
     protected function filesize(string $filename): int
     {
-        $filesize = \filesize($filename);
+        $filesize = filesize($filename);
 
         if (false === $filesize) {
             throw new \RuntimeException(\sprintf('Could not read file \'%s\' size.', $filename));

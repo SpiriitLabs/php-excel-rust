@@ -37,7 +37,7 @@ class WorkbookBuilder
 
     public function build(): array
     {
-        if (null !== $this->defaultStyleHeader) {
+        if (is_a($this->defaultStyleHeader, Format::class)) {
             /** @var Worksheet $worksheet */
             foreach ($this->workbook->getWorksheets() as $worksheet) {
                 foreach ($worksheet->getCellsRowHeaders() as $cell) {

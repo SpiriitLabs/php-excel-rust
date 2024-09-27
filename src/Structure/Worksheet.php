@@ -11,8 +11,6 @@ namespace Spiriit\Rustsheet\Structure;
 
 class Worksheet
 {
-    private string $name;
-
     /**
      * @var Cell[]
      */
@@ -20,9 +18,8 @@ class Worksheet
 
     private bool $autofit = true;
 
-    private function __construct(string $name)
+    private function __construct(private string $name)
     {
-        $this->name = $name;
     }
 
     public static function new(?string $name = null): self
@@ -41,14 +38,12 @@ class Worksheet
     {
         return [
             'name' => $this->name,
-            'cells' => array_map(function (Cell $cell) {
-                return [
-                    'columnIndex' => $cell->columnIndex,
-                    'rowIndex' => $cell->rowIndex,
-                    'value' => $cell->value,
-                    'format' => $cell->format?->toArray(),
-                ];
-            }, $this->cells),
+            'cells' => array_map(fn (Cell $cell) => [
+                'columnIndex' => $cell->columnIndex,
+                'rowIndex' => $cell->rowIndex,
+                'value' => $cell->value,
+                'format' => $cell->format?->toArray(),
+            ], $this->cells),
             'autofit' => $this->autofit,
         ];
     }

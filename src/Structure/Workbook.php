@@ -33,9 +33,7 @@ class Workbook
     {
         return [
             'filename' => $this->filename,
-            'worksheets' => array_map(function (Worksheet $worksheet) {
-                return $worksheet->toArray();
-            }, $this->worksheets),
+            'worksheets' => array_map(fn (Worksheet $worksheet) => $worksheet->toArray(), $this->worksheets),
         ];
     }
 }

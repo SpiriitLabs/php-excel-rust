@@ -25,7 +25,7 @@ class GenerateExcelTest extends TestCase
 
         $schema = file_get_contents(__DIR__.'/../schema.json');
 
-        $avroFile = __DIR__.DIRECTORY_SEPARATOR.'test.avro';
+        $avroFile = __DIR__.\DIRECTORY_SEPARATOR.'test.avro';
         $exportAvro = new ExportAvro(schema: $schema, pathAvro: $avroFile);
         $exportAvro->export($results);
 

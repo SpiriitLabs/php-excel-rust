@@ -14,10 +14,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class WorkbookFactory
 {
-    public function __construct()
-    {
-    }
-
     public function create(ExcelInterface $excel, array $options = []): array
     {
         $options = $this->getOptionsResolver($excel)->resolve($options);
