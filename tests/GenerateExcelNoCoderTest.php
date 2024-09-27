@@ -26,7 +26,7 @@ class GenerateExcelNoCoderTest extends TestCase
         $schema = file_get_contents(__DIR__.'/../schema.json');
 
         $exportAvro = new ExportAvro(schema: $schema, pathAvro: __DIR__.'/us.avro');
-        $exportAvro->export($results, false);
+        $exportAvro->export($results, \AvroDataIO::DEFLATE_CODEC);
 
         self::assertFileExists(__DIR__.'/us.avro');
 

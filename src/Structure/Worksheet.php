@@ -18,7 +18,7 @@ class Worksheet
      */
     private array $cells = [];
 
-    private bool $autofit = false;
+    private bool $autofit = true;
 
     private function __construct(string $name)
     {
@@ -65,9 +65,9 @@ class Worksheet
         return $this;
     }
 
-    public function setAutofit(): self
+    public function setAutofit(bool $autofit): self
     {
-        $this->autofit = true;
+        $this->autofit = $autofit;
 
         return $this;
     }

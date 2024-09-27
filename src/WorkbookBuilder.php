@@ -17,7 +17,7 @@ class WorkbookBuilder
 {
     private ?Format $defaultStyleHeader = null;
 
-    public function __construct(private Workbook $workbook)
+    public function __construct(private readonly Workbook $workbook)
     {
     }
 

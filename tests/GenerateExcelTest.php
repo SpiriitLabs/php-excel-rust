@@ -25,11 +25,12 @@ class GenerateExcelTest extends TestCase
 
         $schema = file_get_contents(__DIR__.'/../schema.json');
 
-        $exportAvro = new ExportAvro(schema: $schema, pathAvro: __DIR__.'/us.avro');
+        $avroFile = __DIR__.DIRECTORY_SEPARATOR.'test.avro';
+        $exportAvro = new ExportAvro(schema: $schema, pathAvro: $avroFile);
         $exportAvro->export($results);
 
-        self::assertFileExists(__DIR__.'/us.avro');
+        self::assertFileExists($avroFile);
 
-        @unlink(__DIR__.'/us.avro');
+        @unlink($avroFile);
     }
 }

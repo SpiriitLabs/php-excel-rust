@@ -3,10 +3,6 @@
   "name": "Workbook",
   "fields": [
     {
-      "name": "filename",
-      "type": "string"
-    },
-    {
       "name": "worksheets",
       "type": {
         "type": "array",

@@ -1,15 +1,16 @@
 {
-    "name": "spiriit/rustsheet",
+    "name": "spiriitlabs/rustsheet",
     "require": {
-        "symfony/filesystem": "7.1",
-        "symfony/process": "7.1",
-        "symfony/serializer": "7.1",
+        "symfony/filesystem": "5.4 | 6.4 | 7.*",
+        "symfony/process": "5.4 | 6.4 | 7.*",
+        "symfony/serializer": "5.4 | 6.4 | 7.*",
         "flix-tech/avro-php": "^5.0",
-        "symfony/options-resolver": "^7.1"
+        "symfony/options-resolver": "5.4 | 6.4 | 7.*",
+        "psr/log": "^3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "11",
-        "symfony/var-dumper": "7.1",
+        "phpunit/phpunit": "11.*",
+        "symfony/var-dumper": "5.4 | 6.4 | 7.*",
         "friendsofphp/php-cs-fixer": "^3.64",
         "phpstan/phpstan": "^1.12"
     },
@@ -28,5 +29,8 @@
             "name": "Gilles Gauthier",
             "email": "ggauthier@spiriit.com"
         }
-    ]
+    ],
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
 }

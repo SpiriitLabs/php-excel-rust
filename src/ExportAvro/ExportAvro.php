@@ -9,6 +9,8 @@
 
 namespace Spiriit\Rustsheet\ExportAvro;
 
+use Spiriit\Rustsheet\AvroExportException;
+
 class ExportAvro
 {
     public const EXPORT_OK = 'ok';
@@ -22,14 +24,16 @@ class ExportAvro
         }
     }
 
-    public function export(array $values, bool $codec = true): string
+    public function export(array $values, string $codec = \AvroDataIO::NULL_CODEC)
     {
-        @unlink($this->pathAvro);
-        $dataWriter = \AvroDataIO::open_file($this->pathAvro, \AvroIO::WRITE_MODE, $this->schema, $codec ? \AvroDataIO::DEFLATE_CODEC : \AvroDataIO::NULL_CODEC);
+        try {
+            @unlink($this->pathAvro);
+            $dataWriter = \AvroDataIO::open_file($this->pathAvro, \AvroIO::WRITE_MODE, $this->schema, $codec);
 
-        $dataWriter->append($values);
-        $dataWriter->close();
-
-        return self::EXPORT_OK;
+            $dataWriter->append($values);
+            $dataWriter->close();
+        } catch (\Throwable $e) {
+            throw new AvroExportException('There is an error when export avro '.$e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
