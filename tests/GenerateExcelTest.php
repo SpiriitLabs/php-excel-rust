@@ -14,14 +14,26 @@ use PHPUnit\Framework\TestCase;
 use Spiriit\Rustsheet\ExportAvro\ExportAvro;
 use Spiriit\Rustsheet\WorkbookFactory;
 use Spiriit\Tests\Fixtures\MyExcel;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class GenerateExcelTest extends TestCase
 {
     #[Test]
     public function it_must_generate_excel(): void
     {
-        $excelFactory = new WorkbookFactory();
-        $results = $excelFactory->create(new MyExcel());
+        $myExcel = new MyExcel();
+
+        $config = [MyExcel::class => ['outputName' => 'test.xlsx']];
+
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->method('has')->willReturn(true);
+        $serviceLocator->method('get')->willReturn($myExcel);
+
+        $excelFactory = new WorkbookFactory(
+            excelSheets: $serviceLocator,
+            config: $config
+        );
+        $results = $excelFactory->create(MyExcel::class);
 
         $schema = file_get_contents(__DIR__.'/../schema.json');
 

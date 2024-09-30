@@ -1,21 +1,24 @@
 <?php
 
 require __DIR__.'/../vendor/autoload.php';
+require __DIR__.'/WorkbookFactoryStub.php';
 
 use Spiriit\Rustsheet\ExcelRust;
-use Spiriit\Rustsheet\WorkbookFactory;
 use Psr\Log\NullLogger;
 
 @unlink($output = 'myexcel_html.xlsx');
 
-$avroFactory = new ExcelRust(
-    workbookFactory: new WorkbookFactory(),
-    rustGenLocation: __DIR__ . '/../vendor/bin/excel_gen'
+$factory = new WorkbookFactoryStub();
+
+$excelRust = new ExcelRust(
+    workbookFactory: $factory,
+    rustGenLocation: __DIR__ . '/../excel_gen',
+    defaultOutputFolder: __DIR__.'/../',
 );
-$avroFactory->setLogger(new NullLogger());
+$excelRust->setLogger(new NullLogger());
 
 $htmlFile = __DIR__.DIRECTORY_SEPARATOR.'fixtures.html';
 
-$avroFactory->generateExcelFromHtml($htmlFile, $output);
+$excelRust->generateExcelFromHtml($htmlFile, $output);
 
 @unlink($output = 'myexcel_html.xlsx');

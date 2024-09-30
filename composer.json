@@ -1,19 +1,22 @@
 {
-    "name": "spiriitlabs/rustsheet",
+    "name": "spiriitlabs/excel-rust",
     "require": {
         "symfony/filesystem": "5.4 | 6.4 | 7.*",
         "symfony/process": "5.4 | 6.4 | 7.*",
         "symfony/serializer": "5.4 | 6.4 | 7.*",
         "flix-tech/avro-php": "^5.0",
         "symfony/options-resolver": "5.4 | 6.4 | 7.*",
-        "psr/log": "^3.0"
+        "psr/log": "^3.0",
+        "symfony/framework-bundle": "6.4 | 7.*",
+        "symfony/string": "6.4 | 7.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "11.*",
+        "phpunit/phpunit": "10.*",
         "symfony/var-dumper": "5.4 | 6.4 | 7.*",
         "friendsofphp/php-cs-fixer": "^3.64",
         "phpstan/phpstan": "^1.12",
-        "rector/rector": "^1.2"
+        "rector/rector": "^1.2",
+        "matthiasnoback/symfony-dependency-injection-test": "^6.0"
     },
     "autoload": {
         "psr-4": {

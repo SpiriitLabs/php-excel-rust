@@ -32,8 +32,7 @@ class WorkbookBuilderTest extends TestCase
             );
 
         $worksheet = Worksheet::new()
-            ->setName('Worksheet1')
-            ->setAutofit();
+            ->setName('Worksheet1');
 
         $worksheet->writeCell(new Cell(columnIndex: 0, rowIndex: 0, format: null, value: 'Item'));
         $worksheet->writeCell(new Cell(columnIndex: 0, rowIndex: 1, format: null, value: 'Cost'));

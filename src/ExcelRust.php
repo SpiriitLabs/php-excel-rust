@@ -14,6 +14,8 @@ use Psr\Log\LoggerAwareTrait;
 use Spiriit\Rustsheet\ExportAvro\ExportAvro;
 use Symfony\Component\Process\Process;
 
+use function Symfony\Component\String\u;
+
 class ExcelRust implements LoggerAwareInterface
 {
     use LoggerAwareTrait;
@@ -22,20 +24,29 @@ class ExcelRust implements LoggerAwareInterface
     public const RUST_GEN_HTML = 'rust_gen_html';
 
     public function __construct(
-        private WorkbookFactory $workbookFactory,
+        private WorkbookFactoryInterface $workbookFactory,
         private string $rustGenLocation,
+        private string $defaultOutputFolder,
     ) {
     }
 
-    public function generateExcelFromAvro(ExcelInterface $excel): void
+    public function generateExcelFromAvro(string $name): string
     {
-        $results = $this->buildExcel($excel);
-        $filenameOutput = $results['filename'];
+        $results = $this->buildExcel($name);
+
+        $filenameOutput = u($this->defaultOutputFolder)
+            ->append(\DIRECTORY_SEPARATOR)
+            ->append($results['filename'])
+            ->ensureEnd('.xlsx')
+            ->toString();
+
         unset($results['filename']);
 
         $avro = $this->exportAvro($results);
 
         $this->execute($avro, $filenameOutput, self::RUST_GEN_AVRO);
+
+        return $filenameOutput;
     }
 
     public function generateExcelFromHtml(string $htmlFile, string $filenameOutput): void
@@ -65,9 +76,9 @@ class ExcelRust implements LoggerAwareInterface
         ]);
     }
 
-    private function buildExcel(ExcelInterface $excel): array
+    private function buildExcel(string $name): array
     {
-        return $this->workbookFactory->create($excel);
+        return $this->workbookFactory->create($name);
     }
 
     private function exportAvro(array $results)

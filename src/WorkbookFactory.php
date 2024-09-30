@@ -10,30 +10,46 @@
 namespace Spiriit\Rustsheet;
 
 use Spiriit\Rustsheet\Structure\Workbook;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 
-class WorkbookFactory
+class WorkbookFactory implements WorkbookFactoryInterface
 {
-    public function create(ExcelInterface $excel, array $options = []): array
-    {
-        $options = $this->getOptionsResolver($excel)->resolve($options);
+    public const DEFAULT_OUTPUT_NAME = 'made_by_rust.xlsx';
 
-        $builder = new WorkbookBuilder(new Workbook($options['filename']));
+    public function __construct(
+        private readonly ServiceLocator $excelSheets,
+        private array $config,
+    ) {
+    }
+
+    public function create(string $name): array
+    {
+        $excel = $this->getsheet($name);
+
+        $outputName = $this->getOutputName($name);
+
+        $builder = new WorkbookBuilder(new Workbook($outputName));
 
         $excel->buildSheet($builder);
 
         return $builder->build();
     }
 
-    private function getOptionsResolver(ExcelInterface $excel): OptionsResolver
+    private function getsheet(string $name): ExcelInterface
     {
-        $resolver = new OptionsResolver();
-        $resolver->setDefaults([
-            'filename' => 'excel.xlsx',
-        ]);
+        if (!$this->excelSheets->has($name)) {
+            throw new \InvalidArgumentException('There is no excel class register '.$name);
+        }
 
-        $excel->configureOptions($resolver);
+        return $this->excelSheets->get($name);
+    }
 
-        return $resolver;
+    private function getOutputName(string $name): string
+    {
+        if (null !== $this->config[$name] ?? null) {
+            return $this->config[$name]['outputName'];
+        }
+
+        return self::DEFAULT_OUTPUT_NAME;
     }
 }

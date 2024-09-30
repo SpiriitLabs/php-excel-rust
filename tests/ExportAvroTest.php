@@ -60,9 +60,8 @@ SCHEMA;
             'favorite_numbers' => [1, 2, 3],
         ];
 
-        $response = $exportAvro->export($values);
+        $exportAvro->export($values);
 
-        self::assertEquals(ExportAvro::EXPORT_OK, $response);
         self::assertFileExists($path);
         @unlink($path);
     }

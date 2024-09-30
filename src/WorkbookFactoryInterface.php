@@ -9,7 +9,7 @@
 
 namespace Spiriit\Rustsheet;
 
-interface ExcelInterface
+interface WorkbookFactoryInterface
 {
-    public function buildSheet(WorkbookBuilder $builder): void;
+    public function create(string $name): array;
 }
