@@ -11,5 +11,7 @@ namespace Spiriit\Rustsheet;
 
 interface WorkbookFactoryInterface
 {
-    public function create(string $name): array;
+    public const DEFAULT_OUTPUT_NAME = 'made_by_rust.xlsx';
+
+    public function create(ExcelInterface|string $name): array;
 }

@@ -13,25 +13,24 @@ use Spiriit\Rustsheet\AvroExportException;
 
 class ExportAvro
 {
-    public const EXPORT_OK = 'ok';
-
     public function __construct(
         private readonly string $schema,
-        private ?string $pathAvro = null,
+        private string $codec = \AvroDataIO::NULL_CODEC,
     ) {
-        if (null === $this->pathAvro) {
-            $this->pathAvro = sys_get_temp_dir().'/'.uniqid('avr', true);
-        }
     }
 
-    public function export(array $values, string $codec = \AvroDataIO::NULL_CODEC)
+    public function export(array $values): string
     {
+        $avroFilePath = \sprintf('%s/%s.avro', sys_get_temp_dir(), uniqid('avro', true));
+
         try {
-            @unlink($this->pathAvro);
-            $dataWriter = \AvroDataIO::open_file($this->pathAvro, \AvroIO::WRITE_MODE, $this->schema, $codec);
+            @unlink($avroFilePath);
+            $dataWriter = \AvroDataIO::open_file($avroFilePath, \AvroIO::WRITE_MODE, $this->schema, $this->codec);
 
             $dataWriter->append($values);
             $dataWriter->close();
+
+            return $avroFilePath;
         } catch (\Throwable $e) {
             throw new AvroExportException('There is an error when export avro '.$e->getMessage(), $e->getCode(), $e);
         }

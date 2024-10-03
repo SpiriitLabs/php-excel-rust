@@ -28,7 +28,9 @@ class ExcelRustExtension extends Extension
         $loader->load('excel_rust.php');
 
         $container->setParameter('spiriit_excel_rust.rust_binary', $config['rust_binary']);
-        $container->setParameter('spiriit_excel_rust.default_output_folder', $config['default_output_folder']);
+
+        $container->setParameter('spiriit_excel_rust.schema_json', file_get_contents(__DIR__.'/../../../../schema.json'));
+        $container->setParameter('spiriit_excel_rust.avro_codec', $config['avro_codec']);
 
         $container->registerAttributeForAutoconfiguration(
             AsExcelRust::class,

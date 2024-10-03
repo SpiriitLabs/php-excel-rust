@@ -17,17 +17,25 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('spiriit_excel_rust');
+
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode
             ->children()
               ->scalarNode('rust_binary')
                 ->info('The rust binary path')
+                ->validate()
+                    ->ifTrue(static function ($v) {
+                        return !file_exists($v);
+                    })
+                    ->thenInvalid('The rust binary path must be a valid path')
+                  ->end()
                 ->isRequired()
               ->end()
-              ->scalarNode('default_output_folder')
-                ->info('The default folder for output excel')
-                ->defaultValue('/tmp')
+                ->enumNode('avro_codec')
+                    ->values([\AvroDataIO::NULL_CODEC, \AvroDataIO::DEFLATE_CODEC, \AvroDataIO::SNAPPY_CODEC])
+                    ->defaultValue(\AvroDataIO::NULL_CODEC)
+                ->end()
             ->end()
         ;
 

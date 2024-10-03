@@ -26,10 +26,9 @@ class ExcelRustExtensionTest extends AbstractExtensionTestCase
     public function assert_parameter(): void
     {
         $this->load([
-            'rust_binary' => '/path/to/excel/bin',
+            'rust_binary' => $path = __DIR__.'/../../Fixtures/excel_rust_test',
         ]);
 
-        $this->assertContainerBuilderHasParameter('spiriit_excel_rust.rust_binary', '/path/to/excel/bin');
-        $this->assertContainerBuilderHasParameter('spiriit_excel_rust.default_output_folder', '/tmp');
+        $this->assertContainerBuilderHasParameter('spiriit_excel_rust.rust_binary', $path);
     }
 }

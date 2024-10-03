@@ -9,7 +9,7 @@ require __DIR__.'/../vendor/autoload.php';
 class WorkbookFactoryStub implements \Spiriit\Rustsheet\WorkbookFactoryInterface
 {
 
-    public function create(string $name): array
+    public function create(\Spiriit\Rustsheet\ExcelInterface|string $name): array
     {
         $excel = new MyExcel();
 
