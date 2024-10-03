@@ -18,9 +18,6 @@ class ExportAvroTest extends TestCase
     #[Test]
     public function it_must_export_to_avro(): void
     {
-        $path = __DIR__.'/Fixtures/test.avro';
-        @unlink($path);
-
         $avroSchema = <<<SCHEMA
 {
   "type": "record",
@@ -51,7 +48,6 @@ SCHEMA;
 
         $exportAvro = new ExportAvro(
             schema: $avroSchema,
-            pathAvro: $path
         );
 
         $values = [
@@ -60,9 +56,9 @@ SCHEMA;
             'favorite_numbers' => [1, 2, 3],
         ];
 
-        $exportAvro->export($values);
+        $avroPath = $exportAvro->export($values);
 
-        self::assertFileExists($path);
-        @unlink($path);
+        self::assertFileExists($avroPath);
+        @unlink($avroPath);
     }
 }

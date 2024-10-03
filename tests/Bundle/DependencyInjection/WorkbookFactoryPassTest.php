@@ -12,7 +12,7 @@ namespace Spiriit\Tests\Bundle\DependencyInjection;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use PHPUnit\Framework\Attributes\Test;
 use Spiriit\Rustsheet\Symfony\Bundle\DependencyInjection\Compiler\ExcelInterfacePass;
-use Spiriit\Rustsheet\WorkbookFactory;
+use Spiriit\Rustsheet\Symfony\Bundle\WorkbookServiceLocatorFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -28,7 +28,7 @@ class WorkbookFactoryPassTest extends AbstractCompilerPassTestCase
     public function if_compiler_pass_collects_services_by_adding_method_calls_these_will_exist(): void
     {
         $collectingService = new Definition();
-        $this->setDefinition(WorkbookFactory::class, $collectingService);
+        $this->setDefinition(WorkbookServiceLocatorFactory::class, $collectingService);
 
         $collectedService = new Definition();
         $collectedService->addTag('spiriit_excel_rust.excel_rust');
@@ -37,7 +37,7 @@ class WorkbookFactoryPassTest extends AbstractCompilerPassTestCase
         $this->compile();
 
         $this->assertContainerBuilderHasServiceDefinitionWithServiceLocatorArgument(
-            WorkbookFactory::class,
+            WorkbookServiceLocatorFactory::class,
             0,
             [
                 '' => new Reference('collected_service'),

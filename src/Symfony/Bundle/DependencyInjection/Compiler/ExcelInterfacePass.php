@@ -9,7 +9,7 @@
 
 namespace Spiriit\Rustsheet\Symfony\Bundle\DependencyInjection\Compiler;
 
-use Spiriit\Rustsheet\WorkbookFactory;
+use Spiriit\Rustsheet\Symfony\Bundle\WorkbookServiceLocatorFactory;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +20,7 @@ class ExcelInterfacePass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition(WorkbookFactory::class)) {
+        if (!$container->hasDefinition(WorkbookServiceLocatorFactory::class)) {
             return;
         }
 
@@ -36,7 +36,8 @@ class ExcelInterfacePass implements CompilerPassInterface
             foreach ($tags as $tag) {
                 if (!\array_key_exists('key', $tag)) {
                     if (\in_array($name, $excelsNames, true)) {
-                        throw new LogicException(\sprintf('Failed creating the "%s" excel with the automatic name "%s": another excel already has this name. To fix this, give the excel an explicit name (hint: using "%s" will override the existing excel).', $fqcn, $name, $name));
+                        throw new LogicException(\sprintf('Failed creating the "%s" excel with the automatic name "%s": another excel already has this name.
+                             To fix this, give the excel an explicit name (hint: using "%s" will override the existing excel).', $name, $name, $name));
                     }
 
                     $tag['key'] = $name;
@@ -48,7 +49,7 @@ class ExcelInterfacePass implements CompilerPassInterface
             }
         }
 
-        $factoryDefinition = $container->findDefinition(WorkbookFactory::class);
+        $factoryDefinition = $container->findDefinition(WorkbookServiceLocatorFactory::class);
 
         $factoryDefinition->setArgument(0, ServiceLocatorTagPass::register($container, $excelsReferences));
         $factoryDefinition->setArgument(1, $excelsConfig);

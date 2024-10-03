@@ -1,7 +1,7 @@
 Spiriit Excel Rust
 ==================
 
-# Rust Excel Library: A High-Performance Solution for Generating Excel Files from PHP
+# Supercharge Excel generation in PHP with Rust's blazing speed!
 
 This PHP library leverages the power of Rust to create Excel files quickly and efficiently.
 
@@ -26,9 +26,12 @@ Once the data is received, the Rust binary uses the **excelrust** library to cre
 
 ## With WorkbookFactory
 
-First create a class implements `ExcelInterface`
+First create a class implements `ExcelInterface` and add attribute 'AsExcelRust'
 
 ```php
+use Spiriit\Rustsheet\Attributes\AsExcelRust;
+
+#[AsExcelRust(outputName: "myexcel.xlsx")] // optionnal outputName
 class MyExcel implements ExcelInterface
 {
     public function buildSheet(WorkbookBuilder $builder): void
@@ -56,13 +59,6 @@ class MyExcel implements ExcelInterface
                 value: 'test'
             ),
         );
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'filename' => '/path/to/output/myexcel.xlsx', // path where file will be generated 
-        ]);
     }
 }
 ```

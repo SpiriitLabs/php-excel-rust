@@ -10,16 +10,22 @@
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Spiriit\Rustsheet\ExcelRust;
-use Spiriit\Rustsheet\WorkbookFactory;
+use Spiriit\Rustsheet\ExportAvro\ExportAvro;
+use Spiriit\Rustsheet\Symfony\Bundle\WorkbookServiceLocatorFactory;
 
 return static function (ContainerConfigurator $container): void {
     $container->services()
-        ->set(WorkbookFactory::class)->public()
+        ->set(WorkbookServiceLocatorFactory::class)->public()
+        ->set(ExportAvro::class)
+            ->args([
+                param('spiriit_excel_rust.schema_json'),
+                param('spiriit_excel_rust.avro_codec'),
+            ])
         ->set(ExcelRust::class)
             ->args([
-                service(WorkbookFactory::class),
+                service(WorkbookServiceLocatorFactory::class),
                 param('spiriit_excel_rust.rust_binary'),
-                param('spiriit_excel_rust.default_output_folder'),
+                service(ExportAvro::class),
             ])
         ->call('setLogger', [service('logger')])
     ;

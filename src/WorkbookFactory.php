@@ -10,46 +10,19 @@
 namespace Spiriit\Rustsheet;
 
 use Spiriit\Rustsheet\Structure\Workbook;
-use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class WorkbookFactory implements WorkbookFactoryInterface
 {
-    public const DEFAULT_OUTPUT_NAME = 'made_by_rust.xlsx';
-
-    public function __construct(
-        private readonly ServiceLocator $excelSheets,
-        private array $config,
-    ) {
-    }
-
-    public function create(string $name): array
+    public function create(ExcelInterface|string $name): array
     {
-        $excel = $this->getsheet($name);
+        if (\is_string($name)) {
+            throw new \InvalidArgumentException('Parameter name must be a ExcelInterface in standalone implementation. String parameter is only for Symfony Bundle');
+        }
 
-        $outputName = $this->getOutputName($name);
+        $builder = new WorkbookBuilder(new Workbook(WorkbookFactoryInterface::DEFAULT_OUTPUT_NAME));
 
-        $builder = new WorkbookBuilder(new Workbook($outputName));
-
-        $excel->buildSheet($builder);
+        $name->buildSheet($builder);
 
         return $builder->build();
-    }
-
-    private function getsheet(string $name): ExcelInterface
-    {
-        if (!$this->excelSheets->has($name)) {
-            throw new \InvalidArgumentException('There is no excel class register '.$name);
-        }
-
-        return $this->excelSheets->get($name);
-    }
-
-    private function getOutputName(string $name): string
-    {
-        if (null !== $this->config[$name] ?? null) {
-            return $this->config[$name]['outputName'];
-        }
-
-        return self::DEFAULT_OUTPUT_NAME;
     }
 }

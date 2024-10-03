@@ -26,19 +26,25 @@ class ExcelRust implements LoggerAwareInterface
     public function __construct(
         private WorkbookFactoryInterface $workbookFactory,
         private string $rustGenLocation,
-        private string $defaultOutputFolder,
+        private ?ExportAvro $exportAvro = null,
     ) {
     }
 
-    public function generateExcelFromAvro(string $name): string
+    public function generateExcelFromAvro(ExcelInterface|string $name, ?string $filenameOutput): string
     {
         $results = $this->buildExcel($name);
 
-        $filenameOutput = u($this->defaultOutputFolder)
-            ->append(\DIRECTORY_SEPARATOR)
-            ->append($results['filename'])
-            ->ensureEnd('.xlsx')
-            ->toString();
+        $filenameOutput = $filenameOutput ?? $results['filename'];
+
+        if (null === $filenameOutput) {
+            $filenameOutput = u($results['filename'])
+                ->ensureEnd('.xlsx')
+                ->toString();
+        } else {
+            $filenameOutput = u($filenameOutput)
+                ->ensureEnd('.xlsx')
+                ->toString();
+        }
 
         unset($results['filename']);
 
@@ -76,27 +82,24 @@ class ExcelRust implements LoggerAwareInterface
         ]);
     }
 
-    private function buildExcel(string $name): array
+    private function buildExcel(ExcelInterface|string $name): array
     {
         return $this->workbookFactory->create($name);
     }
 
-    private function exportAvro(array $results)
+    private function exportAvro(array $results): string
     {
-        $schema = file_get_contents(__DIR__.'/../schema.json');
+        if (null === $this->exportAvro) {
+            throw new \RuntimeException('There is no ExportAvro instance available.');
+        }
 
-        $avroFilePath = \sprintf('%s/%s.avro', sys_get_temp_dir(), uniqid('avro', true));
-
-        $exportAvro = new ExportAvro(schema: $schema, pathAvro: $avroFilePath);
-        $exportAvro->export($results);
-
-        return $avroFilePath;
+        return $this->exportAvro->export($results);
     }
 
     /**
      * @return mixed[]
      */
-    private function rustGen(string $filePath, string $mode, string $outputFile): array
+    protected function rustGen(string $filePath, string $mode, string $outputFile): array
     {
         $command = [$this->rustGenLocation, '--output', $outputFile, self::RUST_GEN_AVRO === $mode ? 'avro' : 'html', '--file', $filePath];
 
@@ -122,7 +125,7 @@ class ExcelRust implements LoggerAwareInterface
         }
     }
 
-    private function checkOutput(string $filenameOutput): void
+    protected function checkOutput(string $filenameOutput): void
     {
         // the output file must exist
         if (!file_exists($filenameOutput)) {
