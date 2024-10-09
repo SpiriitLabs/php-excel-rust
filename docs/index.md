@@ -7,18 +7,22 @@ hero:
   tagline: "PHP to Excel in less than a millisecond!"
   actions:
     - theme: brand
-      text: Markdown Examples
-      link: /markdown-examples
+      text: Getting started
+      link: /php-readme
     - theme: alt
-      text: API Examples
-      link: /api-examples
+      text: Rust
+      link: /rust-excel
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: HTML to Excel 
+    icon:
+      src: /rust-logo-blk.svg
+    details: ~80x times faster than PHP phpoffice/phpspreadsheet for HTML file
+  - title: Generate Fast Excel
+    icon: 🚀
+    details: Fast generation of Excel! 3x times faster than phpoffice/phpspreadsheet
+  - title: Focus on Your Data
+    icon: 🗂️
+    details: Effortlessly create Excel with basic formats.
 ---
 

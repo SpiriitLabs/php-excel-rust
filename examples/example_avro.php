@@ -1,16 +1,13 @@
 <?php
 
 require __DIR__.'/../vendor/autoload.php';
-require __DIR__.'/WorkbookFactoryStub.php';
 
 use Spiriit\Rustsheet\ExcelRust;
 use Spiriit\Tests\Fixtures\MyExcel;
 use Psr\Log\NullLogger;
 use Spiriit\Rustsheet\ExportAvro\ExportAvro;
 
-@unlink($output = __DIR__.'/../myexcel.xlsx');
-
-$factory = new WorkbookFactoryStub();
+$factory = new \Spiriit\Rustsheet\WorkbookFactory();
 
 $exportAvro = new ExportAvro(
     schema: file_get_contents(__DIR__.'/../schema.json')

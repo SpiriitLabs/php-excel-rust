@@ -11,15 +11,17 @@ namespace Spiriit\Rustsheet\Symfony\Bundle;
 
 use Spiriit\Rustsheet\ExcelInterface;
 use Spiriit\Rustsheet\Structure\Workbook;
+use Spiriit\Rustsheet\Traits\WorkbookFactoryTrait;
 use Spiriit\Rustsheet\WorkbookBuilder;
 use Spiriit\Rustsheet\WorkbookFactoryInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 
 class WorkbookServiceLocatorFactory implements WorkbookFactoryInterface
 {
+    use WorkbookFactoryTrait;
+
     public function __construct(
         private readonly ServiceLocator $excelSheets,
-        private array $config,
     ) {
     }
 
@@ -31,9 +33,9 @@ class WorkbookServiceLocatorFactory implements WorkbookFactoryInterface
 
         $excel = $this->getsheet($name);
 
-        $outputName = $this->getOutputName($name);
+        $options = $this->getOptionsResolver($excel);
 
-        $builder = new WorkbookBuilder(new Workbook($outputName));
+        $builder = new WorkbookBuilder(new Workbook($options['filename']));
 
         $excel->buildSheet($builder);
 
@@ -47,14 +49,5 @@ class WorkbookServiceLocatorFactory implements WorkbookFactoryInterface
         }
 
         return $this->excelSheets->get($name);
-    }
-
-    private function getOutputName(string $name): string
-    {
-        if (null !== ($this->config[$name] ?? null)) {
-            return $this->config[$name]['outputName'];
-        }
-
-        return WorkbookFactoryInterface::DEFAULT_OUTPUT_NAME;
     }
 }

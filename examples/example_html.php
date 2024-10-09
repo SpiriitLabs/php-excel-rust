@@ -1,14 +1,13 @@
 <?php
 
 require __DIR__.'/../vendor/autoload.php';
-require __DIR__.'/WorkbookFactoryStub.php';
 
 use Spiriit\Rustsheet\ExcelRust;
 use Psr\Log\NullLogger;
 
 @unlink($output = __DIR__.'/myexcel_html.xlsx');
 
-$factory = new WorkbookFactoryStub();
+$factory = new \Spiriit\Rustsheet\WorkbookFactory();
 
 $excelRust = new ExcelRust(
     workbookFactory: $factory,

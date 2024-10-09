@@ -13,6 +13,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 use Spiriit\Rustsheet\ExportAvro\ExportAvro;
 use Symfony\Component\Process\Process;
+use Webmozart\Assert\Assert;
 
 use function Symfony\Component\String\u;
 
@@ -41,6 +42,8 @@ class ExcelRust implements LoggerAwareInterface
                 ->ensureEnd('.xlsx')
                 ->toString();
         } else {
+            Assert::notEmpty($filenameOutput, 'Filename output cannot be empty.');
+
             $filenameOutput = u($filenameOutput)
                 ->ensureEnd('.xlsx')
                 ->toString();

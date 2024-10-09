@@ -22,16 +22,59 @@ Once the data is received, the Rust binary uses the **excelrust** library to cre
 
 `composer require spiriitlabs/rustsheet`
 
-# Two way for use
+# Download the last release of the rust binary
 
-## With WorkbookFactory
+Go at https://github.com/SpiriitLabs/excel_gen
 
-First create a class implements `ExcelInterface` and add attribute 'AsExcelRust'
+Save the binary somewhere
+
+# Symfony bundle
+
+Just active the bundle in your `bundles.php`
+
+```php
+Spiriit\Rustsheet\Symfony\Bundle\ExcelRustBundle::class => ['all' => true],
+```
+
+Create a file in the folder packages
+
+> config/packages/spiriit_excel_rust.yaml
+
+```yaml
+excel_rust:
+  rust_binary: '%rust_binary%' # path to rust binary
+  avro_codec: 'null' # default to null, because we don't need to compress the file
+```
+
+You need to use the `AsExcelRust` attribute
 
 ```php
 use Spiriit\Rustsheet\Attributes\AsExcelRust;
 
-#[AsExcelRust(outputName: "myexcel.xlsx")] // optionnal outputName
+#[AsExcelRust(name: 'my_super_excel')] // override name is optionnal
+class MyExcel implements ExcelInterface 
+{
+...
+}
+```
+
+```php
+class MyController
+{
+    public function __invoke(ExcelRust $excelRust)
+    {
+        $output = $excelRust->generateExcelFromAvro('MyExcel', __DIR__.'/myexcel_avro.xlsx');
+    }
+}
+```
+
+# Use the library in standalone
+
+## Use a builder
+
+First create a class implements `ExcelInterface` and add attribute 'AsExcelRust'
+
+```php
 class MyExcel implements ExcelInterface
 {
     public function buildSheet(WorkbookBuilder $builder): void
@@ -66,28 +109,34 @@ class MyExcel implements ExcelInterface
 Then create a new instance of ExcelRust and prepare the WorkbookFactory and the excel_rust binary:
 
 ```php
-    $excelGeneratorFromAvro = new ExcelRust(
-        workbookFactory: new WorkbookFactory(),
-        rustGenLocation: __DIR__ . '/../vendor/bin/excel_gen'
+    $factory = new \Spiriit\Rustsheet\WorkbookFactory();
+
+    $exportAvro = new ExportAvro(
+        schema: file_get_contents(__DIR__.'/../schema.json')
     );
-    $excelGeneratorFromAvro->setLogger(new NullLogger());
     
-    $excelGeneratorFromAvro->generateExcelFromAvro(new MyExcel());
+    $excelRust = new ExcelRust(
+        workbookFactory: $factory,
+        rustGenLocation: __DIR__ . '/path/to/excel_gen',
+        exportAvro: $exportAvro,
+    );
+    
+    $output = $excelRust->generateExcelFromAvro(new MyExcel(), __DIR__.'/myexcel_avro.xlsx');
+
 ```
 
 ## From HTML file
 
 ```php
-    $output = '/tmp/output.xlsx';
-    
-    $avroFactory = new ExcelRust(
-        workbookFactory: new WorkbookFactory(),
-        rustGenLocation: __DIR__ . '/../vendor/bin/excel_gen'
+    $factory = new \Spiriit\Rustsheet\WorkbookFactory();
+
+    $excelRust = new ExcelRust(
+        workbookFactory: $factory,
+        rustGenLocation: __DIR__ . '/path/to/excel_gen',
     );
-    $avroFactory->setLogger(new NullLogger());
     
-    $htmlFile = 'fixtures.html';
+    $htmlFile = 'test.html';
     
-    $avroFactory->generateExcelFromHtml($htmlFile, $output);
+    $excelRust->generateExcelFromHtml($htmlFile, $output);
 ```
 

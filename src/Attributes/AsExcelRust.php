@@ -14,7 +14,6 @@ class AsExcelRust
 {
     public function __construct(
         private readonly ?string $name = null,
-        private readonly ?string $outputName = null,
     ) {
     }
 
@@ -22,7 +21,6 @@ class AsExcelRust
     {
         return [
             'key' => $this->name,
-            'outputName' => $this->outputName,
         ];
     }
 }

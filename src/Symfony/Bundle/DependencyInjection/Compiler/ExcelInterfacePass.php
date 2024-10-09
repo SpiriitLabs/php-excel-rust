@@ -26,7 +26,6 @@ class ExcelInterfacePass implements CompilerPassInterface
 
         $excelsReferences = [];
         $excelsNames = [];
-        $excelsConfig = [];
 
         foreach ($container->findTaggedServiceIds('spiriit_excel_rust.excel_rust') as $id => $tags) {
             $definition = $container->findDefinition($id);
@@ -43,7 +42,6 @@ class ExcelInterfacePass implements CompilerPassInterface
                     $tag['key'] = $name;
                 }
 
-                $excelsConfig[$tag['key']] = $tag;
                 $excelsReferences[$tag['key']] = new Reference($id);
                 $excelsNames[] = $tag['key'];
             }
@@ -52,6 +50,5 @@ class ExcelInterfacePass implements CompilerPassInterface
         $factoryDefinition = $container->findDefinition(WorkbookServiceLocatorFactory::class);
 
         $factoryDefinition->setArgument(0, ServiceLocatorTagPass::register($container, $excelsReferences));
-        $factoryDefinition->setArgument(1, $excelsConfig);
     }
 }

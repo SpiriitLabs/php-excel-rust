@@ -14,6 +14,7 @@ use Spiriit\Rustsheet\Structure\Cell;
 use Spiriit\Rustsheet\Structure\Format;
 use Spiriit\Rustsheet\Structure\Worksheet;
 use Spiriit\Rustsheet\WorkbookBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MyExcel implements ExcelInterface
 {
@@ -95,5 +96,12 @@ class MyExcel implements ExcelInterface
         //        }
 
         $builder->addWorksheet($worksheet);
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'output' => '/path/to/output.xlsx',
+        ]);
     }
 }
