@@ -15,6 +15,9 @@ formats directly from PHP. The data and configuration are transmitted to the bin
 
 Once the data is received, the Rust binary uses the **excelrust** library to create the Excel file.
 
+# READY for PROD ?
+
+Yes! We already this in production on large files.
 
 # Install
 
