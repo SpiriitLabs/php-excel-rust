@@ -1,8 +1,6 @@
 Spiriit Excel Rust
 ==================
 
-# Supercharge Excel generation in PHP with Rust's blazing speed!
-
 This PHP library leverages the power of Rust to create Excel files quickly and efficiently.
 
 ## Why choose Rust?
