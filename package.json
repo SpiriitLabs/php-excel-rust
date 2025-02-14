@@ -1,6 +1,12 @@
 {
+  "name": "my-vitepress-docs",
+  "version": "1.0.0",
+  "private": true,
   "scripts": {
     "docs:build": "vitepress build docs",
-    "docs:preview": "vitepress preview docs"
+    "docs:dev": "vitepress dev docs"
+  },
+  "devDependencies": {
+    "vitepress": "^1.0.0"
   }
 }
