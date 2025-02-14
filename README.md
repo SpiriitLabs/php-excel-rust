@@ -14,8 +14,8 @@ By combining PHP for data management with Rust for heavy processing, you get opt
 
 ## How it works
 
-Thanks to a Rust binary, whose source code is available on the [GitHub repository](link_to_repo), it is possible to generate Excel rows and
-formats directly from PHP. The data and configuration are transmitted to the binary using the **AVRO** format ([learn more about AVRO](link_to_avro)).
+Thanks to a Rust binary, whose source code is available on the [GitHub repository](https://github.com/SpiriitLabs/excel_gen), it is possible to generate Excel rows and
+formats directly from PHP. The data and configuration are transmitted to the binary using the **AVRO** format ([learn more about AVRO](https://avro.apache.org/)).
 
 Once the data is received, the Rust binary uses the **excelrust** library to create the Excel file.
 
@@ -25,11 +25,13 @@ Yes! We already this in production on large files.
 
 # Install
 
-`composer require spiriitlabs/rustsheet`
+```bash
+composer require spiriitlabs/excel-rust
+```
 
 # Download the last release of the rust binary
 
-Go at https://github.com/SpiriitLabs/excel_gen
+Go at [https://github.com/SpiriitLabs/excel_gen](https://github.com/SpiriitLabs/excel_gen/tags)
 
 Save the binary somewhere
 
