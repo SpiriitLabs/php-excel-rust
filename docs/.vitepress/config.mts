@@ -2,7 +2,7 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  base: '/',
+  base: '/php-excel-rust/',
   title: "Excel Rust",
   description: "Supercharge Excel generation in PHP with Rust's blazing speed!",
   themeConfig: {
