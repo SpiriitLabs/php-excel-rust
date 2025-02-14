@@ -59,6 +59,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+  
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          publish_dir: ./docs
