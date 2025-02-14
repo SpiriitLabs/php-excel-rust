@@ -3,6 +3,10 @@ Spiriit Excel Rust
 
 This PHP library leverages the power of Rust to create Excel files quickly and efficiently.
 
+[![PHP Version](https://img.shields.io/packagist/php-v/spiriitlabs/excel-rust)](https://packagist.org/packages/spiriitlabs/excel-rust)
+[![Latest Stable Version](https://poser.pugx.org/spiriitlabs/form-filter-bundle/v/stable.svg)](https://packagist.org/packages/spiriitlabs/excel-rust)
+[![CI Tests](https://github.com/SpiriitLabs/excel-rust/actions/workflows/ci.yml/badge.svg)](https://github.com/SpiriitLabs/excel-rust/actions/workflows/ci.yml)
+
 ## Why choose Rust?
 
 Rust is renowned for its execution speed and memory safety, making it an excellent choice for intensive tasks like generating Excel files.
